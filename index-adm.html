@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة التحكم — حفل تخرج رغد</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cinzel:wght@400;600&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --ivory: #f4f7f4;       /* خلفية عاجية مائلة للخضار الخفيف */
+      --sage-light: #e2ede2;  /* أخضر مريمي فاتح للمسات الناعمة */
+      --sage: #8eae8e;        /* أخضر مريمي متوسط */
+      --forest: #2d4a36;      /* أخضر غامق فخم للنصوص والخلفيات الداكنة */
+      --gold: #b8975a;        /* ذهبي كلاسيكي للتفاصيل */
+      --gold-light: #d4b483;  /* ذهبي فاتح */
+      --text: #2f3e33;        /* لون نصوص مائل للزيتوني الغامق */
+      --muted: #708475;       /* لون نصوص باهت متناسق */
+      --green-live: #4caf50;  /* لون نقطة التحديث المباشر */
+      --red: #c9504a;         /* لون الخطأ والحذف */
+    }
+    
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: var(--ivory);
+      color: var(--text);
+      font-family: 'Cairo', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── شاشة تسجيل الدخول ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--forest);
+    }
+    .login-box {
+      background: var(--ivory);
+      padding: 3.5rem 3rem;
+      max-width: 380px; width: 90%;
+      text-align: center;
+      position: relative;
+      animation: fadeUp 0.6s ease forwards;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 2rem; right: 2rem; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .login-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .login-box h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 0.4rem;
+    }
+    .login-box p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .login-box input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--sage);
+      padding: 0.8rem 0;
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      outline: none;
+      text-align: center;
+      letter-spacing: 0.2em;
+      transition: border-color 0.3s;
+      margin-bottom: 2rem;
+    }
+    .login-box input:focus { border-color: var(--gold); }
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--forest);
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+    .login-btn:hover { background: var(--gold); color: white; }
+    .login-error {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--red);
+      display: none;
+    }
+
+    /* ── اللوحة الرئيسية (DASHBOARD) ── */
+    #dashboard { display: none; }
+
+    header {
+      background: var(--forest);
+      padding: 1.2rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .header-title {
+      font-size: 1.2rem;
+      color: var(--ivory);
+      font-weight: 600;
+    }
+    .header-title span {
+      font-size: 0.75rem;
+      color: var(--gold-light);
+      display: block;
+      margin-bottom: 2px;
+      letter-spacing: 1px;
+    }
+    
+    /* أزرار الهيدر */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .back-btn {
+      font-size: 0.8rem;
+      background: var(--gold);
+      border: 1px solid var(--gold);
+      color: white;
+      padding: 0.5rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 4px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: transparent; color: var(--gold); }
+    
+    .logout-btn {
+      font-size: 0.8rem;
+      background: transparent;
+      border: 1px solid var(--sage);
+      color: var(--sage-light);
+      padding: 0.5rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 4px;
+    }
+    .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .dashboard-body { padding: 2.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    /* الكروت والإحصائيات */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--sage-light);
+      padding: 1.8rem;
+      text-align: center;
+      position: relative;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(45, 74, 54, 0.03);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 1rem; right: 1rem; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--sage), transparent);
+    }
+    .stat-num {
+      font-family: 'Cinzel', serif;
+      font-size: 3.2rem;
+      font-weight: 400;
+      color: var(--forest);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      font-weight: 600;
+    }
+    .stat-card.highlight .stat-num { color: var(--gold); }
+
+    /* التنبيه المباشر */
+    .live-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: var(--green-live);
+      border-radius: 50%;
+      margin-left: 0.5rem;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .live-label {
+      font-size: 0.8rem;
+      color: var(--sage-light);
+      display: flex;
+      align-items: center;
+    }
+
+    /* جدول الرسائل المتجاوب */
+    .section-title {
+      font-size: 1.1rem;
+      color: var(--forest);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      border-right: 4px solid var(--sage);
+      padding-right: 10px;
+    }
+    
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      background: white;
+      border: 1px solid var(--sage-light);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .wishes-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    .wishes-table th {
+      font-size: 0.9rem;
+      color: var(--forest);
+      background: var(--sage-light);
+      text-align: right;
+      padding: 1.1rem 1rem;
+      border-bottom: 2px solid var(--sage);
+      font-weight: 700;
+    }
+    .wishes-table td {
+      padding: 1.2rem 1rem;
+      border-bottom: 1px solid var(--ivory);
+      font-size: 0.9rem;
+      vertical-align: middle;
+      color: var(--text);
+    }
+    .wishes-table tr:hover td { background: #f7faf7; }
+    
+    .delete-btn {
+      font-size: 0.75rem;
+      padding: 0.4rem 1rem;
+      background: transparent;
+      border: 1px solid var(--red);
+      color: var(--red);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+    .delete-btn:hover { background: var(--red); color: white; }
+
+    /* جاري التحميل */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── الريسبونسف (Responsive) ── */
+    @media (max-width: 768px) {
+      header { padding: 1rem; justify-content: center; text-align: center; }
+      header div { flex-direction: column; gap: 0.6rem; }
+      .header-actions { width: 100%; justify-content: center; gap: 0.8rem; }
+      .stats-row { grid-template-columns: 1fr; }
+      .dashboard-body { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شاشة تسجيل الدخول -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-icon">🔐</div>
+      <h1>لوحة التحكم الإدارية</h1>
+      <p>حفل تخرج رغد · 2026 🎓</p>
+      <input type="password" id="password-input" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter') doLogin()"/>
+      <button class="login-btn" onclick="doLogin()">دخول</button>
+      <p class="login-error" id="login-error">الرمز السري غير صحيح. حاول مجدداً.</p>
+    </div>
+  </div>
+
+  <!-- لوحة التحكم (الدشبرد) -->
+  <div id="dashboard">
+    <header>
+      <div class="header-title">
+        <span>لوحة التحكم الأدمن</span>
+        حفل تخرج رغد
+      </div>
+      <div class="header-actions">
+        <span class="live-label"><span class="live-dot"></span>وقت فعلي</span>
+        <!-- زر العودة إلى صفحة الدعوة الرئيسية -->
+        <a href="index.html" class="back-btn">العودة للدعوة ✉️</a>
+        <button class="logout-btn" onclick="doLogout()">خروج</button>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+
+      <!-- الكروت الإحصائية -->
+      <div class="stats-row">
+        <div class="stat-card highlight">
+          <div class="stat-num" id="stat-total-wishes">—</div>
+          <div class="stat-label">إجمالي رسائل التبريكات المعروضة</div>
+        </div>
+      </div>
+
+      <!-- قسم إدارة الرسائل -->
+      <div class="tab-panel active">
+        <p class="section-title">إدارة التبريكات والرسائل القادمة</p>
+        <div id="wishes-loading" class="loading">جاري تحميل الرسائل من السحابة...</div>
+        
+        <div class="table-container">
+          <table class="wishes-table" id="wishes-table" style="display:none">
+            <thead>
+              <tr>
+                <th>اسم المهنّئ / الضيف</th>
+                <th>نص الرسالة والتهنئة</th>
+                <th>تاريخ الإرسال</th>
+                <th>إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="wishes-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, onSnapshot, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    // الباسورد المطلوب (تاريخ التخرج)
+    const ADMIN_PASSWORD = '090726';
+
+    // إعدادات الـ Firebase الخاصة بمشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEVH-uEpZoqgTlCaw4G_2jTDWJOSIO9Uc",
+      authDomain: "convite-421a1.firebaseapp.com",
+      projectId: "convite-421a1",
+      storageBucket: "convite-421a1.firebasestorage.app",
+      messagingSenderId: "469700483887",
+      appId: "1:469700483887:web:1a0ddc9bec693d83af5fda"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // دالة الدخول
+    window.doLogin = function() {
+      const val = document.getElementById('password-input').value;
+      if (val === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        startListeners();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('password-input').value = '';
+      }
+    };
+
+    // دالة الخروج
+    window.doLogout = function() {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('password-input').value = '';
+    };
+
+    // الاستماع الفوري لقاعدة البيانات لجلب التبريكات (wishes)
+    function startListeners() {
+      const wishesRef = collection(db, 'wishes');
+      onSnapshot(wishesRef, (snapshot) => {
+        const wishesList = [];
+        snapshot.forEach((doc) => {
+          wishesList.push({ id: doc.id, ...doc.data() });
+        });
+        renderWishesTable(wishesList);
+      });
+    }
+
+    // بناء الجدول وتحديث العداد
+    function renderWishesTable(wishes) {
+      const tbody = document.getElementById('wishes-tbody');
+      tbody.innerHTML = '';
+
+      wishes.forEach((w) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 600; color: var(--forest);">${w.guestName || 'مجهول'}</td>
+          <td style="max-width: 350px; white-space: pre-wrap; line-height: 1.5;">${w.guestMessage || '—'}</td>
+          <td style="font-size: 0.8rem; color: var(--muted);">${formatDate(w.sentAt)}</td>
+          <td><button class="delete-btn" onclick="window.deleteWish('${w.id}')">حذف 🗑️</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('wishes-loading').style.display = 'none';
+      document.getElementById('wishes-table').style.display = 'table';
+      document.getElementById('stat-total-wishes').textContent = wishes.length;
+    }
+
+    // دالة حذف الرسالة مباشرة من الـ Firebase
+    window.deleteWish = async function(id) {
+      if (!confirm('هل أنت متأكد من رغبتك في حذف هذه التهنئة بشكل نهائي؟')) return;
+      try {
+        await deleteDoc(doc(db, 'wishes', id));
+      } catch (error) {
+        alert('حدث خطأ أثناء محاولة الحذف.');
+        console.error("Error deleting document: ", error);
+      }
+    };
+
+    // تنسيق التاريخ والوقت المحلي (ليبيا)
+    function formatDate(iso) {
+      if (!iso) return '—';
+      try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('ar-LY') + ' ' + d.toLocaleTimeString('ar-LY', {hour:'2-digit',minute:'2-digit'});
+      } catch { return iso; }
+    }
+  </script>
+</body>
+</html>
